@@ -16,12 +16,15 @@ public class QuestionBlock : MonoBehaviour
     public Sprite emptyBlockSprite;
 
     private bool canBounce = true;
-    
+
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         originalPosition = transform.localPosition;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void QuestionBlockBounce()
@@ -56,6 +59,8 @@ public class QuestionBlock : MonoBehaviour
         spinningCoin.transform.localPosition = new Vector2(originalPosition.x, originalPosition.y + 1);
 
         StartCoroutine(MoveCoin(spinningCoin));
+
+        audioSource.Play();
     }
 
     IEnumerator Bounce()

@@ -20,6 +20,8 @@ public class EnemyAI : MonoBehaviour
 
     public float timeBeforeDestroy = 1.0f;
 
+    public AudioSource audioSource;
+
     private enum EnemyState
     {
         walking,
@@ -32,6 +34,8 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         enabled = false;
 
         Fall();
@@ -48,6 +52,7 @@ public class EnemyAI : MonoBehaviour
 
     public void Crush()
     {
+        audioSource.Play();
         state = EnemyState.dead;
         GetComponent<Animator>().SetBool("isCrushed", true);
 
