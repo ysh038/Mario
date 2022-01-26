@@ -178,39 +178,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080386830, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
+      propertyPath: coinMoveSpeed
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
---- !u!1 &101778128 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 103438, guid: a2921b55bcf164853960c853662332ad, type: 3}
-  m_PrefabInstance: {fileID: 2071091122}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &101778133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 466550, guid: a2921b55bcf164853960c853662332ad, type: 3}
   m_PrefabInstance: {fileID: 2071091122}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &101778134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101778128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01ca6cb7855f39546a1e249ea7fddb71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpVelocity: 23
-  velocity: {x: 5, y: 0}
-  gravity: 65
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 1
-  floorMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!1001 &203672136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -436,6 +414,10 @@ PrefabInstance:
     - target: {fileID: 413682, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080386830, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
+      propertyPath: coinMoveSpeed
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
@@ -853,6 +835,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080386830, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
+      propertyPath: coinMoveSpeed
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
 --- !u!1001 &1205060560
@@ -966,6 +952,10 @@ PrefabInstance:
     - target: {fileID: 413682, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080386830, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
+      propertyPath: coinMoveSpeed
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d2100a586b7a480c8cf7c574d285745, type: 3}
@@ -1275,10 +1265,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 103438, guid: a2921b55bcf164853960c853662332ad, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 466550, guid: a2921b55bcf164853960c853662332ad, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1335,10 +1321,6 @@ PrefabInstance:
     - target: {fileID: 124218, guid: 4ba430f162f394ec89163bcf70a24ee8, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 124218, guid: 4ba430f162f394ec89163bcf70a24ee8, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 414000, guid: 4ba430f162f394ec89163bcf70a24ee8, type: 3}
       propertyPath: m_RootOrder

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 21252084}
   - component: {fileID: 9545372}
   - component: {fileID: 6174494}
+  - component: {fileID: 1080386830}
   m_Layer: 0
   m_Name: QuestionBlock
   m_TagString: QuestionBlock
@@ -129,3 +130,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1080386830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9924a44900a66304aa73bed5f90dd462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounceHeight: 0.5
+  bounceSpeed: 4
+  emptyBlockSprite: {fileID: 21300000, guid: d1c66c68cb70f4212b2b67f685846f4d, type: 3}

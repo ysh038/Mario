@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerContoller : MonoBehaviour
 {
     public float jumpVelocity;
+    public float bouncingVelocity;
     public Vector2 velocity;
     public float gravity;
     public LayerMask wallMask;
@@ -16,12 +17,13 @@ public class PlayerContoller : MonoBehaviour
     {
         jumping,
         idle,
-        walking
+        walking,
+        bouncing
     }
 
     private PlayerState playerState = PlayerState.idle;
     private bool grounded = false;
-
+    private bool bounce = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +36,8 @@ public class PlayerContoller : MonoBehaviour
         CheckPlayerInput();
 
         UpdatePlayerPosition();
+
+        UpdateAnimationStates();
     }
 
     void UpdatePlayerPosition()
@@ -74,6 +78,20 @@ public class PlayerContoller : MonoBehaviour
             velocity.y -= gravity * Time.deltaTime;
         }
 
+        if(bounce && playerState != PlayerState.bouncing)
+        {
+            playerState = PlayerState.bouncing;
+
+            velocity = new Vector2(velocity.x, bouncingVelocity);
+        }
+
+        if(playerState == PlayerState.bouncing)
+        {
+            pos.y += velocity.y * Time.deltaTime;
+
+            velocity.y -= gravity * Time.deltaTime;
+        }
+
         if(velocity.y <= 0)
         {
             pos = CheckFloorRays(pos);
@@ -90,9 +108,22 @@ public class PlayerContoller : MonoBehaviour
 
     void UpdateAnimationStates()
     {
-        if(grounded && !walk)
+        if(grounded && !walk && !bounce)
         {
-            GetComponent<Animator>().SetBool("Idle")
+            GetComponent<Animator>().SetBool("isJumping", false);
+            GetComponent<Animator>().SetBool("isRunning", false);
+        }
+
+        if(grounded && walk)
+        {
+            GetComponent<Animator>().SetBool("isJumping", false);
+            GetComponent<Animator>().SetBool("isRunning", true);
+        }
+
+        if(playerState == PlayerState.jumping)
+        {
+            GetComponent<Animator>().SetBool("isJumping", true);
+            GetComponent<Animator>().SetBool("isRunning", false);
         }
     }
 
@@ -156,6 +187,13 @@ public class PlayerContoller : MonoBehaviour
                 hitRay = floorRight;
             }
 
+            if(hitRay.collider.tag == "Enemy")
+            {
+                bounce = true;
+
+                hitRay.collider.GetComponent<EnemyAI>().Crush();
+            }
+
             playerState = PlayerState.idle;
 
             grounded = true;
@@ -204,6 +242,11 @@ public class PlayerContoller : MonoBehaviour
                 hitRay = ceilRight;
             }
 
+            if(hitRay.collider.tag == "QuestionBlock")
+            {
+                hitRay.collider.GetComponent<QuestionBlock>().QuestionBlockBounce();
+            }
+
             pos.y = hitRay.collider.bounds.center.y - hitRay.collider.bounds.size.y / 2 - 1;
 
             Fall();
@@ -217,6 +260,8 @@ public class PlayerContoller : MonoBehaviour
     {
         velocity.y = 0;
         playerState = PlayerState.jumping;
+
+        bounce = false;
         grounded = false;
     }
 }
