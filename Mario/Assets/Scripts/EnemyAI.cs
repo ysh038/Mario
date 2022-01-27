@@ -120,7 +120,7 @@ public class EnemyAI : MonoBehaviour
                 isWalkingLeft = true;
             }
         }
-        
+        /*
         if (collision.collider.tag == "Player")
         {
             Debug.Log(collision.contacts[0].point.y+"\n"+ collision.transform.localPosition.y);
@@ -134,7 +134,7 @@ public class EnemyAI : MonoBehaviour
             {
                 SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
             }
-        }
+        }*/
     }
 
     /*   Vector3 CheckGround (Vector3 pos)
