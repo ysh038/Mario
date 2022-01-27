@@ -7,11 +7,14 @@ public class PlayerContoller : MonoBehaviour
     public float jumpVelocity;
     public float bouncingVelocity;
     public Vector2 velocity;
-    public float gravity;
-    public LayerMask wallMask;
-    public LayerMask floorMask;
+    //public float gravity;
+    //public LayerMask wallMask;
+    //public LayerMask floorMask;
 
     private bool walk, walk_left, walk_right, jump;
+
+    private Rigidbody2D playerRigidbody;
+    
 
     public enum PlayerState
     {
@@ -27,7 +30,8 @@ public class PlayerContoller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Fall();
+        playerRigidbody = GetComponent<Rigidbody2D>();
+        //Fall();
     }
 
     // Update is called once per frame
@@ -50,8 +54,11 @@ public class PlayerContoller : MonoBehaviour
             if (walk_left)
             {
                 pos.x -= velocity.x * Time.deltaTime;
-
+                
                 scale.x = -1;
+
+                transform.localPosition = pos;
+                transform.localScale = scale;
             }
 
             if (walk_right)
@@ -59,9 +66,12 @@ public class PlayerContoller : MonoBehaviour
                 pos.x += velocity.x * Time.deltaTime;
 
                 scale.x = 1;
+
+                transform.localPosition = pos;
+                transform.localScale = scale;
             }
 
-            pos = CheckWallRays(pos, scale.x);
+            //pos = CheckWallRays(pos, scale.x);
 
         }
 
@@ -69,30 +79,37 @@ public class PlayerContoller : MonoBehaviour
         {
             playerState = PlayerState.jumping;
 
-            velocity = new Vector2(velocity.x, jumpVelocity);
+            grounded = false;
+
+            playerRigidbody.velocity = Vector2.zero;
+            playerRigidbody.AddForce(new Vector2(0, jumpVelocity));
         }
 
-        if(playerState == PlayerState.jumping)
+        /*if(playerState == PlayerState.jumping)
         {
             pos.y += velocity.y * Time.deltaTime;
             velocity.y -= gravity * Time.deltaTime;
         }
-
+        */
+        /*
         if(bounce && playerState != PlayerState.bouncing)
         {
             playerState = PlayerState.bouncing;
 
             velocity = new Vector2(velocity.x, bouncingVelocity);
-        }
 
-        if(playerState == PlayerState.bouncing)
+           
+        }
+        */
+        /*if(playerState == PlayerState.bouncing)
         {
             pos.y += velocity.y * Time.deltaTime;
 
             velocity.y -= gravity * Time.deltaTime;
         }
+        */
 
-        if(velocity.y <= 0)
+        /*if(velocity.y <= 0)
         {
             pos = CheckFloorRays(pos);
         }
@@ -100,10 +117,44 @@ public class PlayerContoller : MonoBehaviour
         if(velocity.y >= 0)
         {
             pos = CheckCeilingRays(pos);
-        }
+        }*/
 
-        transform.localPosition = pos;
-        transform.localScale = scale;
+        //transform.localPosition = pos;
+        //transform.localScale = scale;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.collider.tag != "Enemy")
+        {
+            if (collision.contacts[0].normal.y >= 0.9f)
+            {
+                grounded = true;
+
+                playerState = PlayerState.idle;
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "QuestionBlock")
+        {
+            // *** 충돌지점 y좌표가 실제보다 0.0025 낮게나옴. 
+            // *** 그래서 0.01정도 실제 충돌지점보다 여유를 둔 범위로 조건을 줌
+            // !! *** 물음표 박스 뿐 아니라 다른 오브젝트도 그러하는지는 확인해야함.
+            if (collision.contacts[0].point.y < collision.transform.localPosition.y - .5 && collision.contacts[0].point.y > collision.transform.localPosition.y - .51)
+            {
+                collision.collider.GetComponent<QuestionBlock>().QuestionBlockBounce();
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        grounded = false;
+
+        playerState = PlayerState.jumping;
     }
 
     void UpdateAnimationStates()
@@ -142,7 +193,7 @@ public class PlayerContoller : MonoBehaviour
         jump = input_space;
     }
 
-    Vector3 CheckWallRays (Vector3 pos, float direction)
+    /*Vector3 CheckWallRays (Vector3 pos, float direction)
     {
         Vector2 originTop = new Vector2(pos.x + direction * .4f, pos.y + 1f - 0.2f);
         Vector2 originMiddle = new Vector2(pos.x + direction * .4f, pos.y);
@@ -158,9 +209,9 @@ public class PlayerContoller : MonoBehaviour
         }
 
         return pos;
-    }
+    }*/
 
-    Vector3 CheckFloorRays(Vector3 pos)
+    /*Vector3 CheckFloorRays(Vector3 pos)
     {
         Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y - 1f);
         Vector2 originMiddle = new Vector2(pos.x, pos.y - 1f);
@@ -213,9 +264,9 @@ public class PlayerContoller : MonoBehaviour
         }
         return pos;
     
-    }
+    }*/
 
-    Vector3 CheckCeilingRays (Vector3 pos)
+    /*Vector3 CheckCeilingRays (Vector3 pos)
     {
         Vector2 originLeft = new Vector2(pos.x - 0.5f + 0.2f, pos.y + 1f);
         Vector2 originMiddle = new Vector2(pos.x, pos.y + 1f);
@@ -253,15 +304,15 @@ public class PlayerContoller : MonoBehaviour
         }
 
         return pos;
+        
+    }*/
 
-    }
-
-    void Fall()
+    /*void Fall()
     {
         velocity.y = 0;
         playerState = PlayerState.jumping;
 
         bounce = false;
         grounded = false;
-    }
+    }*/
 }
