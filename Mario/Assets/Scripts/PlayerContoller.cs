@@ -139,6 +139,7 @@ public class PlayerContoller : MonoBehaviour
             }
             else
             {
+                
                 SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
             }
         }
@@ -146,7 +147,7 @@ public class PlayerContoller : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("¹þ¾î³²");
+        //Debug.Log("¹þ¾î³²");
         grounded = false;
 
         playerState = PlayerState.jumping;
@@ -186,5 +187,9 @@ public class PlayerContoller : MonoBehaviour
         walk_right = input_right && !input_left;
 
         jump = input_space;
+    }
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("Life", 0);
     }
 }
