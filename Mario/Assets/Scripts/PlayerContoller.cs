@@ -117,7 +117,7 @@ public class PlayerContoller : MonoBehaviour
         //Debug.Log("충돌함");
         if(collision.collider.tag == "QuestionBlock")
         {
-            // *** 충돌지점 y좌표가 실제보다 0.0025 낮게나옴. 
+            // *** 충돌지점 y좌표가 실제보다 0.0025 낮게나옴   . 
             // *** 그래서 0.01정도 실제 충돌지점보다 여유를 둔 범위로 조건을 줌
             // !! *** 물음표 박스 뿐 아니라 다른 오브젝트도 그러하는지는 확인해야함.
             if (collision.contacts[0].point.y < collision.transform.localPosition.y - .5 && collision.contacts[0].point.y > collision.transform.localPosition.y - .51)

@@ -3,7 +3,10 @@ guid: 9924a44900a66304aa73bed5f90dd462
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - emptyBlockSprite: {instanceID: 0}
+  - audioSource: {instanceID: 0}
+  - bump: {fileID: 8300000, guid: a2901eb2584c96940aaec9b782f1794f, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

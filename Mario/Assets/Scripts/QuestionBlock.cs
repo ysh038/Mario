@@ -18,7 +18,7 @@ public class QuestionBlock : MonoBehaviour
     private bool canBounce = true;
 
     public AudioSource audioSource;
-
+    public AudioClip bump;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +34,11 @@ public class QuestionBlock : MonoBehaviour
             canBounce = false;
 
             StartCoroutine(Bounce());
+        }
+        else
+        {
+            audioSource.clip = bump;
+            audioSource.Play();
         }
     }
 

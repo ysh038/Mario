@@ -150,6 +150,7 @@ MonoBehaviour:
   coinFallDistance: 2
   emptyBlockSprite: {fileID: 21300000, guid: d1c66c68cb70f4212b2b67f685846f4d, type: 3}
   audioSource: {fileID: 0}
+  bump: {fileID: 8300000, guid: a2901eb2584c96940aaec9b782f1794f, type: 3}
 --- !u!82 &1141992911
 AudioSource:
   m_ObjectHideFlags: 0
@@ -162,7 +163,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 69d9d3d6883b57a4bba2f8a860496f47, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0

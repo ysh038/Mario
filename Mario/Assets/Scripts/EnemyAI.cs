@@ -28,6 +28,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
         velocity = Vector2.zero;
         audioSource = GetComponent<AudioSource>();
         isWalkingLeft = true;
