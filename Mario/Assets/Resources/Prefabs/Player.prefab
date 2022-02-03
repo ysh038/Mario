@@ -166,10 +166,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpVelocity: 900
-  bouncingVelocity: 300
+  bouncingVelocity: 400
   velocity: {x: 5, y: 0}
   audiosource: {fileID: 0}
   jumpSound: {fileID: 8300000, guid: a8a24887af6d76942962b787843f6394, type: 3}
+  dieSound: {fileID: 8300000, guid: fead5fdbff06f3b4183bf7463f6c0cc2, type: 3}
+  winSound: {fileID: 8300000, guid: 3e92939896b342042b0df04acb62c4d9, type: 3}
+  isDead: 0
+  isWin: 0
 --- !u!82 &240663379
 AudioSource:
   m_ObjectHideFlags: 0

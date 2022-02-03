@@ -15,6 +15,10 @@ public class PlayerContoller : MonoBehaviour
 
     public AudioSource audiosource;
     public AudioClip jumpSound;
+    public AudioClip dieSound;
+    public AudioClip winSound;
+
+    private bool deadWait = false;
 
     public enum PlayerState
     {
@@ -27,6 +31,9 @@ public class PlayerContoller : MonoBehaviour
     private PlayerState playerState = PlayerState.idle;
     private bool grounded = false;
     private bool bounce = false;
+    public bool isDead = false;
+    public bool isWin = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,59 +49,66 @@ public class PlayerContoller : MonoBehaviour
         UpdatePlayerPosition();
 
         UpdateAnimationStates();
+
+        if (isWin)
+        {
+            WalkRight();
+        }
     }
 
     void UpdatePlayerPosition()
     {
-        Vector3 pos = transform.localPosition;
-        Vector3 scale = transform.localScale;
-
-        if (walk)
+        if (!isDead && !isWin)
         {
-            if (walk_left)
-            {
-                pos.x -= velocity.x * Time.deltaTime;
-                scale.x = -1;
+            Vector3 pos = transform.localPosition;
+            Vector3 scale = transform.localScale;
 
-                transform.localPosition = pos;
-                transform.localScale = scale;
+            if (walk)
+            {
+                if (walk_left)
+                {
+                    pos.x -= velocity.x * Time.deltaTime;
+                    scale.x = -1;
+
+                    transform.localPosition = pos;
+                    transform.localScale = scale;
+                }
+
+                if (walk_right)
+                {
+                    pos.x += velocity.x * Time.deltaTime;
+                    scale.x = 1;
+
+                    transform.localPosition = pos;
+                    transform.localScale = scale;
+                }
+
             }
 
-            if (walk_right)
+            if (jump && playerState != PlayerState.jumping)
             {
-                pos.x += velocity.x * Time.deltaTime;
-                scale.x = 1;
+                playerState = PlayerState.jumping;
 
-                transform.localPosition = pos;
-                transform.localScale = scale;
+                grounded = false;
+
+                playerRigidbody.velocity = Vector2.zero;
+                playerRigidbody.AddForce(new Vector2(0, jumpVelocity));
+                audiosource.Play();
             }
 
+            if (bounce && playerState != PlayerState.bouncing)
+            {
+                playerState = PlayerState.bouncing;
+
+                grounded = false;
+
+                playerRigidbody.velocity = Vector2.zero;
+                playerRigidbody.AddForce(new Vector2(0, bouncingVelocity));
+
+                bounce = false;
+                playerState = PlayerState.idle;
+            }
         }
-
-        if(jump && playerState != PlayerState.jumping)
-        {
-            playerState = PlayerState.jumping;
-
-            grounded = false;
-
-            playerRigidbody.velocity = Vector2.zero;
-            playerRigidbody.AddForce(new Vector2(0, jumpVelocity));
-            audiosource.Play();
-        }
-
-        if(bounce && playerState != PlayerState.bouncing)
-        {
-            playerState = PlayerState.bouncing;
-
-            grounded = false;
-
-            playerRigidbody.velocity = Vector2.zero;
-            playerRigidbody.AddForce(new Vector2(0, bouncingVelocity));
-
-            bounce = false;
-            playerState = PlayerState.idle;
-        }
-        
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -128,7 +142,7 @@ public class PlayerContoller : MonoBehaviour
 
         if (collision.collider.tag == "Enemy")
         {
-            Debug.Log(collision.contacts[0].point.y + "\n" + collision.transform.localPosition.y);
+            //Debug.Log(collision.contacts[0].point.y + "\n" + collision.transform.localPosition.y);
             // 마리오가 커져버리면 이 부분 수정해야할듯
             // 얘는 차이가 좀 커서 0.02로 줬음
             if (collision.contacts[0].point.y > collision.transform.localPosition.y + .5 && collision.contacts[0].point.y < collision.transform.localPosition.y + .51)
@@ -139,10 +153,88 @@ public class PlayerContoller : MonoBehaviour
             }
             else
             {
+                audiosource.PlayOneShot(dieSound);
+                GetComponent<Animator>().SetBool("isJumping", false);
+                GetComponent<Animator>().SetBool("isRunning", false);
+                isDead = true;
                 
-                SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
+                StartCoroutine("DeadJump");
+
+                // *** 아직 사망 애니메이션이 없어서 애니메이션 전환은 구현안됨
+               
             }
         }
+
+        else if(collision.collider.tag == "Flag" && !isWin)
+        {
+            isWin = true;
+            
+            //audiosource.PlayOneShot(winSound);
+
+            playerRigidbody.velocity = new Vector2(-5f,0);
+            collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
+            GetComponent<Animator>().SetBool("isJumping", false);
+            GetComponent<Animator>().SetBool("isRunning", false);
+
+            playerRigidbody.gravityScale = 0.5f;
+            if (collision.collider.tag == "Flag")
+            {
+                StartCoroutine(WinWalk(collision));
+                //StartCoroutine(KillFlag(collision));
+            }
+        }
+    }
+
+    /*IEnumerator KillFlag(Collision2D collision)
+    {
+        yield return new WaitForSeconds(1f);
+        
+    }*/
+
+    IEnumerator WinWalk(Collision2D collision)
+    {
+        playerRigidbody.gravityScale = 1f;
+        
+        yield return new WaitForSeconds(1f);
+        
+        GetComponent<Animator>().SetBool("isJumping", false);
+        GetComponent<Animator>().SetBool("isRunning", true);
+
+        Invoke("GoToGameOver", 5f);
+    }
+
+    private void WalkRight()
+    {
+        Vector3 pos = transform.localPosition;
+        Vector3 scale = transform.localScale;
+
+        pos.x += velocity.x * Time.deltaTime;
+        scale.x = 1;
+
+        transform.localPosition = pos;
+        transform.localScale = scale;
+    }
+
+    IEnumerator DeadJump()
+    {
+        Debug.Log("DeadJumpStart");
+
+        yield return new WaitForSeconds(1f);
+        deadWait = true;
+        Debug.Log("DeadJumpEnd");
+        if (deadWait)
+        {
+            playerRigidbody.AddForce(new Vector2(0, 1500f));
+            playerRigidbody.gravityScale = 8;
+            gameObject.GetComponent<Collider2D>().enabled = false;
+        }
+        Invoke("GoToGameOver", 1.5f);
+    }
+
+    private void GoToGameOver()
+    {
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -155,38 +247,43 @@ public class PlayerContoller : MonoBehaviour
 
     void UpdateAnimationStates()
     {
-        if(grounded && !walk && !bounce)
+        if (!isDead)
         {
-            GetComponent<Animator>().SetBool("isJumping", false);
-            GetComponent<Animator>().SetBool("isRunning", false);
-        }
+            if (grounded && !walk && !bounce)
+            {
+                GetComponent<Animator>().SetBool("isJumping", false);
+                GetComponent<Animator>().SetBool("isRunning", false);
+            }
 
-        if(grounded && walk)
-        {
-            GetComponent<Animator>().SetBool("isJumping", false);
-            GetComponent<Animator>().SetBool("isRunning", true);
-        }
+            if (grounded && walk)
+            {
+                GetComponent<Animator>().SetBool("isJumping", false);
+                GetComponent<Animator>().SetBool("isRunning", true);
+            }
 
-        if(playerState == PlayerState.jumping)
-        {
-            GetComponent<Animator>().SetBool("isJumping", true);
-            GetComponent<Animator>().SetBool("isRunning", false);
+            if (playerState == PlayerState.jumping)
+            {
+                GetComponent<Animator>().SetBool("isJumping", true);
+                GetComponent<Animator>().SetBool("isRunning", false);
+            }
         }
     }
 
     void CheckPlayerInput()
     {
-        bool input_left = Input.GetKey(KeyCode.LeftArrow);
-        bool input_right = Input.GetKey(KeyCode.RightArrow);
-        bool input_space = Input.GetKeyDown(KeyCode.Space);
+        if (!isDead && !isWin) {
+            bool input_left = Input.GetKey(KeyCode.LeftArrow);
+            bool input_right = Input.GetKey(KeyCode.RightArrow);
+            bool input_space = Input.GetKeyDown(KeyCode.Space);
 
-        walk = input_left || input_right;
+            walk = input_left || input_right;
 
-        walk_left = input_left && !input_right;
+            walk_left = input_left && !input_right;
 
-        walk_right = input_right && !input_left;
+            walk_right = input_right && !input_left;
 
-        jump = input_space;
+            jump = input_space;
+        }
     }
     private void OnApplicationQuit()
     {

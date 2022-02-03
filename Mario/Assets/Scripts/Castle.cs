@@ -9,7 +9,7 @@ public class Castle : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            SceneManager.LoadScene("Win",LoadSceneMode.Single);
+            other.gameObject.SetActive(false);
         }
     }
 }

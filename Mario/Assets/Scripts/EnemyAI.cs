@@ -10,6 +10,7 @@ public class EnemyAI : MonoBehaviour
 
     private bool shouldDie = false;
     private float deathTimer = 0;
+    private bool stopMoving = false;
 
     public float timeBeforeDestroy = 1.0f;
 
@@ -73,28 +74,31 @@ public class EnemyAI : MonoBehaviour
 
     void UpdateEnemyPosition()
     {
-        if(state != EnemyState.dead)
+        if (!stopMoving)
         {
-            Vector3 pos = transform.localPosition;
-            Vector3 scale = transform.localScale;
-
-            if (state == EnemyState.walking)
+            if (state != EnemyState.dead)
             {
-                if (isWalkingLeft)
-                {
-                    pos.x -= velocity.x * Time.deltaTime;
+                Vector3 pos = transform.localPosition;
+                Vector3 scale = transform.localScale;
 
-                    scale.x = -1;
-                }
-                else
+                if (state == EnemyState.walking)
                 {
-                    pos.x += velocity.x * Time.deltaTime;
+                    if (isWalkingLeft)
+                    {
+                        pos.x -= velocity.x * Time.deltaTime;
 
-                    scale.x = 1;
+                        scale.x = -1;
+                    }
+                    else
+                    {
+                        pos.x += velocity.x * Time.deltaTime;
+
+                        scale.x = 1;
+                    }
                 }
+                transform.localPosition = pos;
+                transform.localScale = scale;
             }
-            transform.localPosition = pos;
-            transform.localScale = scale;
         }
     }
 
@@ -102,7 +106,7 @@ public class EnemyAI : MonoBehaviour
     {
         if(collision.collider.tag != "Player" && collision.collider.tag != "Ground")
         {
-            Debug.Log("d");
+            //Debug.Log("d");
             if (isWalkingLeft)
             {
                 isWalkingLeft = false;
@@ -111,6 +115,10 @@ public class EnemyAI : MonoBehaviour
             {
                 isWalkingLeft = true;
             }
+        }
+        else if(collision.collider.tag == "Player")
+        {
+            stopMoving = true;
         }
     }
     private void OnBecameVisible()

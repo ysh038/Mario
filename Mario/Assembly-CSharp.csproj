@@ -55,13 +55,15 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Castle.cs" />
     <Compile Include="Assets\Scripts\QuestionBlock.cs" />
+    <Compile Include="Assets\Scripts\Brick.cs" />
     <Compile Include="Assets\Scripts\PlayerContoller.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\GameOver\GameManager.cs" />
+    <Compile Include="Assets\Scripts\EnemyRespawner.cs" />
     <Compile Include="Assets\Scripts\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\GameOver\Title.cs" />
-    <Compile Include="Assets\Scripts\Brick.cs" />
-    <Compile Include="Assets\Scripts\EnemyRespawner.cs" />
+    <Compile Include="Assets\Scripts\TitleMusic.cs" />
+    <Compile Include="Assets\Scripts\Flag.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
